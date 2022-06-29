@@ -21,9 +21,20 @@ function Posts() {
   }
   // backend.learntohack.com.au
   function getBlogByCategory() {
-    var tag = params.tag.toLowerCase();
-    setPage(page + 1);
-    Axios.get(`${process.env.React_App_Api_Url}/api/blog/getblogbycategory?tag=${tag}&page_no=${page}`).then(blogs => {
+    debugger
+    var pages,tags;
+    if(params.tag.toLowerCase()==tag)
+    {
+      pages = page+1
+      setPage(pages);
+    }
+    else{
+      pages = 0
+      tags = params.tag.toLowerCase();
+      setTag(tags);
+      setPage(0);
+    }
+    Axios.get(`${process.env.React_App_Api_Url}/api/blog/getblogbycategory?tag=${params.tag.toLowerCase()}&page_no=${pages}`).then(blogs => {
       //  setPosts(blogs.data.resData);
       setPosts(prevPosts => [...prevPosts, ...blogs.data.resData])
       setloading(false);
@@ -82,15 +93,21 @@ function Posts() {
   useEffect(() => {
     setloading(true);
     window.scrollTo(0, 0);
-    setTag(params.tag);
-    setPage(0);
+    if(params.tag)
+    {
+      setTag(params.tag.toLowerCase());
+    }
+    else{
+      setTag('');
+    }
+    //setPage(0);
     if (params.tag) {
-      setPage(0);
+   //   setPage(0);
       getBlogByCategory();
       setPosts([]);
     }
     else {
-      setPage(0);
+    //  setPage(0);
       getAllBlogs();
       setPosts([]);
     }
