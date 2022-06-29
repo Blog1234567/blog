@@ -13,7 +13,7 @@ function About() {
     function splitDate(x)
   {
         let y = x.split('T');
-        return y[0];
+        return y[0]; 
   }
   function mostRead()
     {
